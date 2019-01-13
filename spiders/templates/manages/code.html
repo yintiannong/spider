@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<script type="text/javascript" src="/static/login/js/jQuery1.7.js"></script>
+<script type="text/javascript" src="/static/login/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="/static/login/js/jquery1.42.min.js"></script>
+<script type="text/javascript" src="/static/login/js/jquery.SuperSlide.js"></script>
+<script type="text/javascript" src="/static/login/js/Validform_v5.3.2_min.js"></script>
+<script>
+            function refresh(){
+                //重新为img的src赋值，将触发一次图片的请求
+                console.log('123456')
+                $("#num").attr("src","{% url 'spider:yzm' %}?"+new Date().getTime())
+            }
+    </script>
+<head>
+    <meta charset="UTF-8">
+    <title>验证码</title>
+</head>
+<body>
+ <div id="code">
+        <form action="{% url 'gl:yz' %}" method="post">
+            {% csrf_token %}
+          <label>验证码：</label>
+          <input type="text" id="stu_code_hide" name="code1"  nullmsg="验证码不能为空！" datatype="*4-4" errormsg="验证码有4位数！" sucmsg="验证码验证通过！"/>
+          <img id="num" onclick="refresh()" src="{% url 'spider:yzm' %}" title="点击更换" alt="验证码占位图"/>
+            <input type="submit">    <input type="reset">
+        </form>
+ </div>
+
+</body>
+
+</html>

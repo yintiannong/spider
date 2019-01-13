@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="/static/regist/scripts/jquery/jquery-1.7.1.js"></script>
+<link href="/static/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+<link href="/static/style/authority/common_style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/static/regist/scripts/authority/commonAll.js"></script>
+<script type="text/javascript" src="/static/regist/scripts/fancybox/jquery.fancybox-1.3.4.js"></script>
+<script type="text/javascript" src="/static/regist/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/style/authority/jquery.fancybox-1.3.4.css" media="screen"></link>
+<script type="text/javascript" src="/static/regist/scripts/artDialog/artDialog.js?skin=default"></script>
+<title>百智招聘</title>
+<script type="text/javascript">
+</script>
+<style>
+</style>
+</head>
+<body>
+	<form id="submitForm" name="submitForm"  method="post">
+    {% csrf_token %}
+		<input type="hidden" name="allIDCheck" value="" id="allIDCheck"/>
+		<input type="hidden" name="fangyuanEntity.fyXqName" value="" id="fyXqName"/>
+		<div id="container">
+			<div class="ui_content">
+				<div class="ui_text_indent">
+					<div id="box_border">
+						<div id="box_top">搜索</div>
+						<div id="box_center">
+							<select name="fangyuanEntity.fyXqCode" id="fyXq" class="ui_select01" onchange="getFyDhListByFyXqCode();">
+                                <option value=""
+                                >--请选择--</option>
+                                <option value="" name="city">城市</option>
+                                <option value="" name="position">职位</option>
+                            </select>
+							<input type="text" id="fyZldz" name="fangyuanEntity.fyZldz" class="ui_input_txt02" />
+							<input type="button" value="查询" class="ui_input_btn01" onclick="search();" /> 
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui_content">
+				<div class="ui_tb">
+					<table class="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+						<tr>
+							
+						
+							<th>职位</th>
+							<th>公司</th>
+							<th>月薪</th>
+							<th>任职要求</th>
+							<th>经验要求</th>
+							<th>学历要求</th>
+							<th>公司地点</th>
+							<th>部门</th>
+						</tr>
+                        {% for i in page %}
+							<tr>
+								
+								<td>{{ i.position }}</td>
+								<td>{{ i.company }}</td>
+								<td>{{ i.salary }}</td>
+								<td>无要求</td>
+								<td>{{ i.experience }}</td>
+								<td>{{ i.education }}</td>
+								<td>{{ i.city }}</td>
+								<td>研发部</td>
+					
+							</tr>
+		                {% endfor %}
+					</table>
+				</div>
+				<div class="ui_tb_h30">
+					<div class="ui_flt" style="height: 30px; line-height: 30px;">
+						共有
+						<span class="ui_txt_bold04">{{ page_count}}</span>
+						条记录，当前第
+						<span class="ui_txt_bold04">{{ page.number }}
+						/
+						{{page.paginator.num_pages }}</span>
+						页
+					</div>
+					<div class="ui_frt">
+						<!--    如果是第一页，则只显示下一页、尾页 -->
+						
+							<input onclick="first()" type="button" value="首页" class="ui_input_btn01" />
+                            {% if  page.has_previous %}
+							<input type="button" onclick="previous({{ page.previous_page_number }},{{ request.COOKIES.username }})" value="上一页" class="ui_input_btn01" />
+
+                            {% endif %}
+                            {% if  page.has_next %}
+                            <input  type="button" value="下一页" class="ui_input_btn01" onclick="jumpNormalPage1({{ page.next_page_number }},{{ request.COOKIES.username }});" />
+                            {% endif %}
+							<input type="button" value="尾页" class="ui_input_btn01" onclick="jumpNormalPage({{ page.paginator.num_pages }},{{ request.COOKIES.username }});" />
+							<!--     如果是最后一页，则只显示首页、上一页 -->
+						
+						转到第<input name="ppage" type="text" id="jumpNumTxt" class="ui_input_txt01" />页
+							 <input type="button" class="ui_input_btn01" value="跳转" onclick="jumpInputPage({{ request.COOKIES.username }});" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+    <script>
+        function first() {
+            location.href='{% url 'gl:menu_page' %}?&cityid={{ cityid }}&name={{ name }}&num=1'
+        }
+        function previous(a,username) {
+            if(username){
+            location.href='{% url 'gl:menu_page' %}?&cityid={{ cityid }}&name={{ name }}&num='+a}
+            else {
+                location.href='{% url 'spider:dl' %}'
+            }
+        }
+        function jumpNormalPage1(a,username) {
+            console.log(1789)
+             if(username){
+            location.href='{% url 'gl:menu_page' %}?&cityid={{ cityid }}&name={{ name }}&num='+a}
+            else {
+                location.href='{% url 'spider:dl' %}'
+            }
+        }
+        function jumpNormalPage(b,username) {
+            if(username){
+            location.href='{% url 'gl:menu_page' %}?&cityid={{ cityid }}&name={{ name }}&num='+b}
+             else {
+                location.href='{% url 'spider:dl' %}'
+            }
+
+        }
+        function jumpInputPage(username) {
+            console.log(username)
+            if(username){
+            $('#submitForm').submit()}
+            else {
+                console.log('218848')
+                location.href='{% url 'spider:dl' %}'
+            }
+        }
+    </script>
+</body>
+</html>
